@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
-# Create your views here.
+from .models import Post
+
+
+class HomeView(TemplateView):
+    template_name = "wblog/home.html"
