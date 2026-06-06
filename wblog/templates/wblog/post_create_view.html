@@ -1,0 +1,10 @@
+{%extends 'wblog/base.html'%}
+{%block content%}
+<p>{{page_title}}</p>
+<form action="" method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Create Post</button>
+</form>
+
+{%endblock%}
