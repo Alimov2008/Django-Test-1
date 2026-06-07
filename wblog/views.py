@@ -27,6 +27,7 @@ class PostView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = "wblog/post_detail_view.html"
+    context_object_name = "post"
 
 
 class PostCreateView(CreateView):
@@ -72,6 +73,7 @@ class PostDeleteView(DeleteView):
     model = Post
     template_name = "wblog/post_delete_view.html"
     success_url = reverse_lazy("post_list")
+    context_object_name = "post"
 
     def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
         """

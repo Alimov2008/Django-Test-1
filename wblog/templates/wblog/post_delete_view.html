@@ -5,7 +5,7 @@
     {%csrf_token%}
     <p>Delete {{object.title}}</p>
     <button type="submit">Delete Post</button>
-    <a href="{%url 'post_list'%}">Cancel</a>
+    <a href="{%url 'post_detail' post.pk%}">Cancel</a>
 </form>
 
 {%endblock%}
