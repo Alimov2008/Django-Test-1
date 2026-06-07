@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
@@ -27,13 +28,13 @@ class PostView(ListView):
     context_object_name = "posts"
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = "wblog/post_detail_view.html"
     context_object_name = "post"
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "wblog/post_create_view.html"
     fields = ["title", "context"]
@@ -55,7 +56,7 @@ class PostCreateView(CreateView):
         return context
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = "wblog/post_update_view.html"
     fields = ["title", "context"]
@@ -72,7 +73,7 @@ class PostUpdateView(UpdateView):
         return obj
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = "wblog/post_delete_view.html"
     success_url = reverse_lazy("post_list")
@@ -96,6 +97,10 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("home_page")
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        """
+        Uppon successfully filling form auto-logs new user,
+        thus skipping login process after registration
+        """
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
