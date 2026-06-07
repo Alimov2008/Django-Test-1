@@ -37,15 +37,35 @@ class PostCreateView(CreateView):
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         """
-        in case of form being valid assigns post author to the user who created it
+        In case of form being valid assigns post author to the user who created it
         """
         form.instance.author = self.request.user
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
+        """
+        Adds an additional attribute to context data being send to template
+        """
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Create New Post"
         return context
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = "wblog/post_update_view.html"
+    fields = ["title", "context"]
+    success_url = reverse_lazy("post_list")
+
+    def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
+        """
+        Disallows Post instance deletion in case
+        of current user and post author mismatch
+        """
+        obj = super().get_object(queryset)
+        if obj.author != self.request.user:
+            raise PermissionError("Not your post")
+        return obj
 
 
 class PostDeleteView(DeleteView):
