@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
@@ -56,38 +56,46 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     template_name = "wblog/post_update_view.html"
     fields = ["title", "context"]
     success_url = reverse_lazy("post_list")
 
-    def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
-        """
-        Disallows Post instance deletion in case
-        of current user and post author mismatch
-        """
-        obj = super().get_object(queryset)
-        if obj.author != self.request.user:
-            raise PermissionError("Not your post")
-        return obj
+    # def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
+    #     """
+    #     Disallows Post instance deletion in case
+    #     of current user and post author mismatch
+    #     """
+    #     obj = super().get_object(queryset)
+    #     if obj.author != self.request.user:
+    #         raise PermissionError("Not your post")
+    #     return obj
+
+    def test_func(self) -> bool | None:
+        post = self.get_object()
+        return post.author == self.request.user
 
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = "wblog/post_delete_view.html"
     success_url = reverse_lazy("post_list")
     context_object_name = "post"
 
-    def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
-        """
-        Disallows Post instance deletion in case
-        of current user and post author mismatch
-        """
-        obj = super().get_object(queryset)
-        if obj.author != self.request.user:
-            raise PermissionError("Not your post")
-        return obj
+    # def get_object(self, queryset: QuerySet[Any] | None = None) -> Model:
+    #     """
+    #     Disallows Post instance deletion in case
+    #     of current user and post author mismatch
+    #     """
+    #     obj = super().get_object(queryset)
+    #     if obj.author != self.request.user:
+    #         raise PermissionError("Not your post")
+    #     return obj
+
+    def test_func(self):
+        post = self.get_object()
+        return post.author == self.request.user
 
 
 class RegisterView(CreateView):
