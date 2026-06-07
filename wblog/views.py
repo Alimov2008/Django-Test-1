@@ -1,3 +1,5 @@
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
@@ -84,3 +86,10 @@ class PostDeleteView(DeleteView):
         if obj.author != self.request.user:
             raise PermissionError("Not your post")
         return obj
+
+
+class RegisterView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = "registration/register.html"
+    success_url = reverse_lazy("home_page")
