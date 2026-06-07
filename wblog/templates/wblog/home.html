@@ -1,4 +1,16 @@
 {%extends 'wblog/base.html'%}
 {%block content%}
-<p>Home Page</p>
+<nav>
+    {% if user.is_authenticated %}
+        <span>Hello, {{ user.username }}</span>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+</nav>
 {%endblock%}
