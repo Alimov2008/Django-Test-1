@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
@@ -93,3 +94,8 @@ class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = "registration/register.html"
     success_url = reverse_lazy("home_page")
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)
