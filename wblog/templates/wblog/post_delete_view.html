@@ -1,11 +1,40 @@
 {%extends 'wblog/base.html'%}
 {%block content%}
-
-<form action="" method="post">
-    {%csrf_token%}
-    <p>Delete {{object.title}}</p>
-    <button type="submit">Delete Post</button>
-    <a href="{%url 'post_detail' post.pk%}">Cancel</a>
-</form>
-
+ 
+<style>
+    .delete-card {
+        background: var(--surface);
+        border: 1px solid var(--danger);
+        border-radius: var(--radius);
+        padding: 2.5rem 2rem;
+        max-width: 480px;
+    }
+    .delete-card h2 { color: var(--danger); margin-bottom: 0.5rem; }
+    .delete-card .post-ref {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.1rem;
+        color: var(--ink);
+        margin: 1rem 0 0.5rem;
+    }
+    .delete-card .warning {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+    }
+</style>
+ 
+<div class="delete-card">
+    <h2>Delete Post?</h2>
+    <p class="post-ref">"{{ object.title }}"</p>
+    <p class="warning">This action is permanent and cannot be undone.</p>
+    <form action="" method="post">
+        {%csrf_token%}
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'post_detail' post.pk %}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+ 
 {%endblock%}
