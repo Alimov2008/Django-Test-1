@@ -104,7 +104,7 @@ class RegisterView(CreateView):
     template_name = "registration/register.html"
     success_url = reverse_lazy("home_page")
 
-    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+    def form_valid(self, form):
         """
         Uppon successfully filling form auto-logs new user,
         thus skipping login process after registration
