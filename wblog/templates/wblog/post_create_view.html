@@ -1,8 +1,24 @@
+
+raw
+Post create view · HTML
 {%extends 'wblog/base.html'%}
 {%block content%}
-<form action="" method="post">
-    {%csrf_token%}
-    {{form.as_p}}
-    <button type="submit">Create Post</button>
-</form>
+ 
+<a href="{% url 'post_list' %}" class="back-link" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .2s;">&#8592; All Posts</a>
+ 
+<h1>{{ page_title|default:"New Post" }}</h1>
+<p class="muted" style="margin-bottom:2rem;">Share something worth reading.</p>
+ 
+<div class="form-card">
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.as_p}}
+        <div class="flex gap-4 mt-6" style="flex-wrap:wrap;">
+            <button type="submit" class="btn btn-solid">Publish Post</button>
+            <a href="{% url 'post_list' %}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+ 
 {%endblock%}
+ 
