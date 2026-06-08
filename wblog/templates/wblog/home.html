@@ -1,16 +1,96 @@
 {%extends 'wblog/base.html'%}
 {%block content%}
-<nav>
-    {% if user.is_authenticated %}
-        <span>Hello, {{ user.username }}</span>
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'signup' %}">Sign Up</a>
-    {% endif %}
-</nav>
+ 
+<style>
+    .hero {
+        text-align: center;
+        padding: 4rem 0 3rem;
+        position: relative;
+    }
+    .hero-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+        font-size: clamp(2.8rem, 8vw, 5rem);
+        line-height: 1.05;
+        margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+        font-style: italic;
+        color: var(--accent);
+    }
+    .hero-sub {
+        font-size: 1.05rem;
+        color: var(--muted);
+        max-width: 420px;
+        margin: 0 auto 2.5rem;
+    }
+    .hero-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .hero-line {
+        width: 60px;
+        height: 1px;
+        background: var(--border);
+        margin: 3.5rem auto;
+    }
+    .auth-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.5rem;
+    }
+    .auth-strip-user {
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+    .auth-strip-user strong { color: var(--ink); }
+    .auth-strip form { margin: 0; }
+</style>
+ 
+<section class="hero">
+    <p class="hero-eyebrow">Est. 2026</p>
+    <h1>Words worth<br><em>reading.</em></h1>
+    <p class="hero-sub">A minimal blog for ideas, stories, and the craft of writing.</p>
+    <div class="hero-actions">
+        <a href="{% url 'post_list' %}" class="btn btn-solid">Browse Posts</a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="btn">Create Account</a>
+        {% endif %}
+    </div>
+</section>
+ 
+<div class="hero-line"></div>
+ 
+{% if user.is_authenticated %}
+    <div class="auth-strip">
+        <p class="auth-strip-user">Signed in as <strong>{{ user.username }}</strong></p>
+        <div class="flex gap-4 items-center">
+            <a href="{% url 'post_create' %}" class="btn">New Post</a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost">Logout</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="auth-strip">
+        <p class="auth-strip-user">Have an account? Jump back in.</p>
+        <div class="flex gap-4 items-center">
+            <a href="{% url 'login' %}" class="btn">Login</a>
+            <a href="{% url 'signup' %}" class="btn btn-ghost">Sign Up</a>
+        </div>
+    </div>
+{% endif %}
+ 
 {%endblock%}
