@@ -1,11 +1,32 @@
 {% extends "wblog/base.html" %}
-
+ 
 {% block content %}
-<h1>Logout</h1>
-
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
-
+ 
+<style>
+    .auth-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 2rem;
+    }
+    .auth-layout h1 { text-align: center; margin-bottom: 0.75rem; }
+    .auth-layout .muted { text-align: center; margin-bottom: 2rem; }
+    .auth-layout .form-card { width: 100%; max-width: 380px; text-align: center; }
+</style>
+ 
+<div class="auth-layout">
+    <h1>Sign Out</h1>
+    <p class="muted">Are you sure you want to log out?</p>
+ 
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex gap-4" style="justify-content:center; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-solid">Yes, Logout</button>
+                <a href="{% url 'home_page' %}" class="btn btn-ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+ 
 {% endblock %}
