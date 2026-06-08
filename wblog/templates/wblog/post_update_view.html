@@ -1,9 +1,21 @@
 {%extends 'wblog/base.html'%}
 {%block content%}
-<form action="" method="post">
-    {%csrf_token%}
-    {{form.as_p}}
-    <button type="submit">Update Post</button>
-</form>
-<a href="{%url 'post_detail' object.pk%}">Cancel</a>
+ 
+<a href="{% url 'post_detail' object.pk %}" class="back-link" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .2s;">&#8592; Back to Post</a>
+ 
+<h1>Edit Post</h1>
+<p class="muted" style="margin-bottom:2rem;">Revise and refine your writing.</p>
+ 
+<div class="form-card">
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.as_p}}
+        <div class="flex gap-4 mt-6" style="flex-wrap:wrap;">
+            <button type="submit" class="btn btn-solid">Save Changes</button>
+            <a href="{% url 'post_detail' object.pk %}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+ 
 {%endblock%}
+ 
